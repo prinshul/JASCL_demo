@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>JASCL · Continual Segmentation under Joint Nonstationarity</title>
+<meta name="description" content="JASCL: continual semantic segmentation under joint class, domain and label shift. Accepted at ICML 2026.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&family=Sofia+Sans+Extra+Condensed:wght@800&family=Sofia+Sans:wght@400;500&display=swap">
+<style>
+  :root{
+    --bg:#04070B; --fg:#E8EEF4; --fg2:#AEBDCB; --line:rgba(200,220,240,.1); --amber:#F5B83D;
+    --display:"Sofia Sans Extra Condensed","Arial Narrow",sans-serif;
+    --body:"Sofia Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+    --mono:"IBM Plex Mono",ui-monospace,monospace;
+    color-scheme:dark;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{
+    background:radial-gradient(1200px 600px at 50% -120px,#0E1A26 0%,rgba(14,26,38,0) 70%),var(--bg);
+    color:var(--fg); font-family:var(--body); -webkit-font-smoothing:antialiased;
+    padding:clamp(48px,9vw,112px) 16px clamp(48px,7vw,96px);
+  }
+  header{max-width:920px;margin:0 auto;text-align:center}
+  .badge{
+    display:inline-flex;align-items:center;gap:10px;
+    font:500 13px/1 var(--mono);letter-spacing:.2em;text-transform:uppercase;color:var(--amber);
+    border:1px solid rgba(245,184,61,.42);background:rgba(245,184,61,.07);
+    border-radius:999px;padding:10px 18px 10px 14px;
+  }
+  .badge i{width:7px;height:7px;border-radius:50%;background:var(--amber);box-shadow:0 0 10px var(--amber)}
+  h1{
+    font:800 clamp(38px,7.4vw,92px)/.92 var(--display);letter-spacing:.005em;text-transform:uppercase;
+    margin:26px 0 0;text-wrap:balance;overflow-wrap:anywhere;
+  }
+  .about{
+    font:400 clamp(17px,1.9vw,20px)/1.6 var(--body);color:var(--fg2);
+    max-width:760px;margin:28px auto 0;text-wrap:pretty;
+  }
+  .about b{color:var(--fg);font-weight:500}
+  main{max-width:1200px;margin:clamp(48px,7vw,88px) auto 0;display:grid;gap:clamp(20px,3vw,36px)}
+  .film{
+    margin:0;border-radius:12px;overflow:hidden;background:#05080B;
+    box-shadow:0 0 0 1px var(--line),0 30px 80px rgba(0,0,0,.55);
+  }
+  .film video{display:block;width:100%;height:auto;aspect-ratio:16/9;background:#05080B}
+</style>
+</head>
+<body>
+  <header>
+    <div class="badge"><i></i>Accepted at ICML 2026</div>
+    <h1>Continual Segmentation under Joint Nonstationarity</h1>
+    <p class="about">
+      Real segmentation models face new classes, new domains and very few labels all at once.
+      <b>JASCL</b> learns under this joint shift with two parts.
+      <b>Gradient-adaptive stabilization (GAS)</b> perturbs each classifier weight with noise scaled by its gradient, so few-shot updates don't overwrite what was learned before.
+      <b>Prototype anchored supervision (PAS)</b> uses unlabeled images, keeping a pseudo-label only when it is confident and close to its class prototype.
+      Across medical and driving benchmarks, JASCL consistently improves over prior methods.
+    </p>
+  </header>
+
+  <main>
+    <figure class="film">
+      <video src="media/jascl-method.mp4" poster="media/poster-method.jpg" autoplay muted loop playsinline preload="auto" disablepictureinpicture aria-label="How JASCL works: one training step, from GAS to PAS"></video>
+    </figure>
+    <figure class="film">
+      <video src="media/jascl-medical.mp4" poster="media/poster-medical.jpg" autoplay muted loop playsinline preload="auto" disablepictureinpicture aria-label="Medical demo: six sessions of CT and MRI, fine-tuning versus JASCL"></video>
+    </figure>
+    <figure class="film">
+      <video src="media/jascl-driving.mp4" poster="media/poster-driving.jpg" autoplay muted loop playsinline preload="auto" disablepictureinpicture aria-label="Driving demo: US to Europe to India, GAPS versus GAPS plus JASCL"></video>
+    </figure>
+  </main>
+
+<script>
+  // Keep all three playing like GIFs, even where autoplay waits for a first touch.
+  const vids = [...document.querySelectorAll('video')];
+  const playAll = () => vids.forEach(v => { v.muted = true; const p = v.play(); if (p) p.catch(() => {}); });
+  playAll();
+  ['click', 'touchstart', 'scroll', 'keydown'].forEach(e => addEventListener(e, playAll, { once: true, passive: true }));
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) playAll(); });
+  vids.forEach(v => v.addEventListener('pause', () => { if (!document.hidden) v.play().catch(() => {}); }));
+</script>
+</body>
+</html>
