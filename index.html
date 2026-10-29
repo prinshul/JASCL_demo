@@ -40,12 +40,15 @@
     max-width:760px;margin:28px auto 0;text-wrap:pretty;
   }
   .about b{color:var(--fg);font-weight:500}
-  main{max-width:1200px;margin:clamp(48px,7vw,88px) auto 0;display:grid;gap:clamp(20px,3vw,36px)}
+  main{max-width:1200px;margin:clamp(48px,7vw,88px) auto 0;display:grid;gap:clamp(40px,5vw,64px)}
   .film{
     margin:0;border-radius:12px;overflow:hidden;background:#05080B;
     box-shadow:0 0 0 1px var(--line),0 30px 80px rgba(0,0,0,.55);
   }
   .film video{display:block;width:100%;height:auto;aspect-ratio:16/9;background:#05080B}
+  section{display:grid;gap:14px}
+  h2{margin:0;font:800 clamp(26px,3.4vw,36px)/1 var(--display);letter-spacing:.04em;text-transform:uppercase;display:flex;align-items:center;gap:12px}
+  h2 span{font:500 12px/1 var(--mono);letter-spacing:.2em;color:var(--amber);border:1px solid rgba(245,184,61,.42);border-radius:999px;padding:7px 11px}
 </style>
 </head>
 <body>
@@ -62,25 +65,24 @@
   </header>
 
   <main>
-    <figure class="film">
-      <video src="jascl-method.mp4" poster="poster-method.jpg" autoplay muted loop playsinline preload="auto" disablepictureinpicture aria-label="How JASCL works: one training step, from GAS to PAS"></video>
-    </figure>
-    <figure class="film">
-      <video src="jascl-medical.mp4" poster="poster-medical.jpg" autoplay muted loop playsinline preload="auto" disablepictureinpicture aria-label="Medical demo: six sessions of CT and MRI, fine-tuning versus JASCL"></video>
-    </figure>
-    <figure class="film">
-      <video src="jascl-driving.mp4" poster="poster-driving.jpg" autoplay muted loop playsinline preload="auto" disablepictureinpicture aria-label="Driving demo: US to Europe to India, GAPS versus GAPS plus JASCL"></video>
-    </figure>
+    <section>
+      <h2><span>01</span>Method</h2>
+      <figure class="film"><video src="jascl-method.mp4" poster="poster-method.jpg" controls playsinline preload="metadata" aria-label="Method: one JASCL training step, from GAS to PAS"></video></figure>
+    </section>
+    <section>
+      <h2><span>02</span>Med demo</h2>
+      <figure class="film"><video src="jascl-medical.mp4" poster="poster-medical.jpg" controls playsinline preload="metadata" aria-label="Med demo: six CT and MRI sessions, fine-tuning versus JASCL"></video></figure>
+    </section>
+    <section>
+      <h2><span>03</span>Natural demo</h2>
+      <figure class="film"><video src="jascl-driving.mp4" poster="poster-driving.jpg" controls playsinline preload="metadata" aria-label="Natural demo: US to Europe to India, GAPS versus GAPS plus JASCL"></video></figure>
+    </section>
   </main>
 
 <script>
-  // Keep all three playing like GIFs, even where autoplay waits for a first touch.
+  // Playing one film pauses the others.
   const vids = [...document.querySelectorAll('video')];
-  const playAll = () => vids.forEach(v => { v.muted = true; const p = v.play(); if (p) p.catch(() => {}); });
-  playAll();
-  ['click', 'touchstart', 'scroll', 'keydown'].forEach(e => addEventListener(e, playAll, { once: true, passive: true }));
-  document.addEventListener('visibilitychange', () => { if (!document.hidden) playAll(); });
-  vids.forEach(v => v.addEventListener('pause', () => { if (!document.hidden) v.play().catch(() => {}); }));
+  vids.forEach(v => v.addEventListener('play', () => vids.forEach(o => { if (o !== v) o.pause(); })));
 </script>
 </body>
 </html>
